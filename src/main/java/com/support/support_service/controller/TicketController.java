@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.support.support_service.dto.AddMessageRequest;
 import com.support.support_service.dto.CreateTicketRequest;
@@ -32,13 +32,12 @@ public class TicketController {
     }
 
     @GetMapping("/debug")
-public String debugHeaders(
-        @RequestHeader("X-User-Email") String email,
-        @RequestHeader("X-User-Role") String role
-) {
-    return email + " | " + role;
-}
-
+    public String debugHeaders(
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Role", required = false) String role
+    ) {
+        return "email=" + email + ", role=" + role;
+    }
 
     // 1️⃣ Create a ticket
     @PostMapping("/tickets")
