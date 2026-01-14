@@ -30,6 +30,15 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
+    @GetMapping("/debug")
+public String debugHeaders(
+        @RequestHeader("X-User-Email") String email,
+        @RequestHeader("X-User-Role") String role
+) {
+    return email + " | " + role;
+}
+
+
     // 1️⃣ Create a ticket
     @PostMapping("/tickets")
     public Ticket createTicket(
