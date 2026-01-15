@@ -30,13 +30,13 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket createTicket(
-            Long userId,
+            String email,
             String subject,
             String description,
             TicketPriority priority
     ) {
         Ticket ticket = Ticket.builder()
-                .userId(userId)
+                .email(email)
                 .subject(subject)
                 .description(description)
                 .priority(priority)
@@ -47,8 +47,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getTicketsByUser(Long userId) {
-        return ticketRepository.findByUserId(userId);
+    public List<Ticket> getTicketsByUser(String email) {
+        return ticketRepository.findByEmail(email);
     }
 
     @Override

@@ -10,13 +10,13 @@ import com.support.support_service.model.enums.TicketStatus;
 public interface TicketService {
 
     Ticket createTicket(
-            Long userId,
+            String email,
             String subject,
             String description,
             TicketPriority priority
     );
 
-    List<Ticket> getTicketsByUser(Long userId);
+    List<Ticket> getTicketsByUser(String email);
 
     Ticket getTicketById(Long ticketId);
 

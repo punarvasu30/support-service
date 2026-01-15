@@ -42,10 +42,12 @@ public class TicketController {
     // 1️⃣ Create a ticket
     @PostMapping("/tickets")
     public Ticket createTicket(
+            @RequestHeader(value = "X-User-Email", required = false) String email,
+            @RequestHeader(value = "X-User-Role", required = false) String role,
             @RequestBody @Valid CreateTicketRequest request
     ) {
         return ticketService.createTicket(
-                request.getUserId(),
+                email,
                 request.getSubject(),
                 request.getDescription(),
                 request.getPriority()
@@ -53,9 +55,9 @@ public class TicketController {
     }
 
     // 2️⃣ Get all tickets for a user
-    @GetMapping("/user/{userId}")
-    public List<Ticket> getUserTickets(@PathVariable Long userId) {
-        return ticketService.getTicketsByUser(userId);
+    @GetMapping("/my-tickets")
+    public List<Ticket> getUserTickets(@RequestHeader(value = "X-User-Email", required = false) String email) {
+        return ticketService.getTicketsByUser(email);
     }
 
     // 3️⃣ Get ticket by ID
