@@ -43,8 +43,8 @@ public class TicketMessage {
     @Column(nullable = false)
     private SenderType senderType;
 
-    @Column(nullable = false)
-    private Long senderId;
+    @Column(nullable = true)
+    private String email;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String message;

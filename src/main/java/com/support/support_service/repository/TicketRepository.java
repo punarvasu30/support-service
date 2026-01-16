@@ -10,7 +10,7 @@ import com.support.support_service.model.enums.TicketStatus;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     // All tickets of a user
-    List<Ticket> findByEmail(String email);
+    List<Ticket> findByEmailOrderByCreatedAtDesc(String email);
 
     // Filter by status
     List<Ticket> findByStatus(TicketStatus status);

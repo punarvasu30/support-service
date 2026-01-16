@@ -57,13 +57,15 @@ public class TicketController {
     // 2️⃣ Get all tickets for a user
     @GetMapping("/my-tickets")
     public List<Ticket> getUserTickets(@RequestHeader(value = "X-User-Email", required = false) String email) {
-        return ticketService.getTicketsByUser(email);
+        return ticketService.getTicketsByEmail(email);
     }
 
     // 3️⃣ Get ticket by ID
     @GetMapping("/{ticketId}")
-    public Ticket getTicket(@PathVariable Long ticketId) {
-        return ticketService.getTicketById(ticketId);
+    public Ticket getTicket(@PathVariable Long ticketId,
+        @RequestHeader(value = "X-User-Email", required = false) String email
+    ) {
+        return ticketService.getTicketById(ticketId, email);
     }
 
     // 4️⃣ Update ticket status
@@ -78,18 +80,21 @@ public class TicketController {
     @PostMapping("/{ticketId}/messages")
     public TicketMessage addMessage(
             @PathVariable Long ticketId,
+            @RequestHeader(value = "X-User-Email", required = false) String email,
             @RequestBody @Valid AddMessageRequest request
     ) {
         return ticketService.addMessage(
                 ticketId,
-                request.getMessage(),
-                request.isFromUser()
+                email,
+                request.getMessage()
         );
     }
 
     // 6️⃣ Get ticket messages
     @GetMapping("/{ticketId}/messages")
-    public List<TicketMessage> getMessages(@PathVariable Long ticketId) {
-        return ticketService.getMessages(ticketId);
+    public List<TicketMessage> getMessages(@PathVariable Long ticketId,
+        @RequestHeader(value = "X-User-Email", required = false) String email
+    ) {
+        return ticketService.getMessages(ticketId, email);
     }
 }

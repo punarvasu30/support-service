@@ -47,19 +47,25 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getTicketsByUser(String email) {
-        return ticketRepository.findByEmail(email);
+    public List<Ticket> getTicketsByEmail(String email) {
+        return ticketRepository.findByEmailOrderByCreatedAtDesc(email);
     }
 
     @Override
-    public Ticket getTicketById(Long ticketId) {
-        return ticketRepository.findById(ticketId)
+    public Ticket getTicketById(Long ticketId, String email) {
+        Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        if (!ticket.getEmail().equals(email) && email != null) {
+            throw new RuntimeException("Unauthorized access to ticket");
+        }
+
+        return ticket;
     }
 
     @Override
     public Ticket updateTicketStatus(Long ticketId, TicketStatus status) {
-        Ticket ticket = getTicketById(ticketId);
+        Ticket ticket = getTicketById(ticketId, null);
         ticket.setStatus(status);
         return ticketRepository.save(ticket);
     }
@@ -67,22 +73,26 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketMessage addMessage(
             Long ticketId,
-            String message,
-            boolean isFromUser
+            String email,
+            String message
     ) {
-        Ticket ticket = getTicketById(ticketId);
+        Ticket ticket = getTicketById(ticketId, email);
 
         TicketMessage ticketMessage = TicketMessage.builder()
                 .ticket(ticket)
                 .message(message)
-                .senderType(isFromUser ? SenderType.USER : SenderType.AGENT)
+                .senderType(SenderType.USER)
+                .email(email)
                 .build();
 
         return ticketMessageRepository.save(ticketMessage);
     }
 
     @Override
-    public List<TicketMessage> getMessages(Long ticketId) {
+    public List<TicketMessage> getMessages(Long ticketId, String email) {
+
+        Ticket ticket = getTicketById(ticketId, email);
+
         return ticketMessageRepository
                 .findByTicketIdOrderByCreatedAtAsc(ticketId);
     }

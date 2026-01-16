@@ -16,17 +16,17 @@ public interface TicketService {
             TicketPriority priority
     );
 
-    List<Ticket> getTicketsByUser(String email);
+    List<Ticket> getTicketsByEmail(String email);
 
-    Ticket getTicketById(Long ticketId);
+    Ticket getTicketById(Long ticketId, String email);
 
     Ticket updateTicketStatus(Long ticketId, TicketStatus status);
 
     TicketMessage addMessage(
             Long ticketId,
-            String message,
-            boolean isFromUser
+            String email,
+            String message
     );
 
-    List<TicketMessage> getMessages(Long ticketId);
+    List<TicketMessage> getMessages(Long ticketId, String email);
 }
